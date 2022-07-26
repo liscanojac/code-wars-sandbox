@@ -2,23 +2,16 @@
 function movingZeroes(arr) {
 
   const resultArr = [];
-  let zeroesCounter = 0;
+  const zeroesArr = [];
 
   for (let i = 0; i < arr.length; i++) {
 
     if (arr[i] === 0) {
-
-      zeroesCounter++;
+      zeroesArr.push(0);
       continue;
     }
     resultArr.push(arr[i]);
   }
 
-  if (zeroesCounter > 0) {
-
-    const zeroesArr = new Array(zeroesCounter).fill(0);
-
-    return resultArr.concat(zeroesArr);
-  }
-  return resultArr;
+  return resultArr.concat(zeroesArr);
 }
