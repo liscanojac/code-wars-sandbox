@@ -16,3 +16,17 @@ function digitalRoot(n) {
 
   return digitalRoot(result);
 }
+
+function digitalRootArray(n) {
+
+  const nArr = n.toString().split('');
+
+  const sumArr = nArr.reduce((prev, curr) => Number(prev) + Number(curr))
+  
+  if (sumArr < 10) {
+    return nArr
+  }
+  
+  return nArr.concat(digitalRootArray(sumArr))
+}
+console.log(digitalRootArray(942))
