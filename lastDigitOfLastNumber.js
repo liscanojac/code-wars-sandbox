@@ -10,12 +10,9 @@ function lastDigit(str1, str2) {
 
   if (sameLastDigitAsBaseNumber.includes(baseNumber)) return baseNumber;
 
-  let powerNumber = (Number(str2.substring(str2.length - 2)) % 4);
-
-  if(!powerNumber) powerNumber = 4;
+  let powerNumber = (Number(str2.substring(str2.length - 2)) % 4) || 4;
 
   const result = (baseNumber ** powerNumber).toString()
 
   return Number(result.substring(result.length - 1));
 }
-lastDigit('4', '4')
