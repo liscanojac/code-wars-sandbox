@@ -1,7 +1,7 @@
 // https://www.codewars.com/kata/51b66044bce5799a7f000003
 
 const RomanNumerals = {
-  symbols: {
+  romanSymbols: {
     1: 'I',
     5: 'V',
     10: 'X',
@@ -9,6 +9,15 @@ const RomanNumerals = {
     100: 'C',
     500: 'D',
     1000: 'M'
+  },
+  arabic: {
+    I: 1,
+    V: 5,
+    X: 10,
+    L: 50,
+    C: 100,
+    D: 500,
+    M: 1000
   },
   quantityChecker: [
     {
@@ -42,7 +51,7 @@ const RomanNumerals = {
   ],
   toRoman(num) {
     if (!num) return '';
-    if (this.symbols.hasOwnProperty(num)) return this.symbols[num];
+    if (this.romanSymbols.hasOwnProperty(num)) return this.romanSymbols[num];
 
     if (num < 4000) {
 
@@ -64,9 +73,9 @@ const RomanNumerals = {
   },
   getSpecialCharacter(index) {
     return {
-      symbol: `${this.symbols[(this.quantityChecker[index].repeatable ? 
+      symbol: `${this.romanSymbols[(this.quantityChecker[index].repeatable ? 
         this.quantityChecker[index].value : 
-        this.quantityChecker[index - 1].value)]}${this.symbols[this.quantityChecker[index + 1].value]}`,
+        this.quantityChecker[index - 1].value)]}${this.romanSymbols[this.quantityChecker[index + 1].value]}`,
       value: this.quantityChecker[index + 1].value - (this.quantityChecker[index].repeatable ? this.quantityChecker[index].value : this.quantityChecker[index - 1].value)
     }
   },
@@ -74,14 +83,29 @@ const RomanNumerals = {
 
     if (!this.quantityChecker[index].repeatable) {
       return {
-        symbol: `${this.symbols[this.quantityChecker[index].value]}`,
+        symbol: `${this.romanSymbols[this.quantityChecker[index].value]}`,
         value: this.quantityChecker[index].value
       }
     }
     return {
-      symbol: `${this.symbols[this.quantityChecker[index].value]}`.repeat(Math.floor(num / this.quantityChecker[index].value)),
+      symbol: `${this.romanSymbols[this.quantityChecker[index].value]}`.repeat(Math.floor(num / this.quantityChecker[index].value)),
       value: this.quantityChecker[index].value * Math.floor(num / this.quantityChecker[index].value)
     }
+  },
+  fromRoman(romanNumber) {
+    if(this.arabic.hasOwnProperty(romanNumber)) return this.arabic[romanNumber]
+
+    let result = [];
+    for (let i = 0; i < romanNumber.length; i++) {
+
+      result.push(this.arabic[romanNumber[i]])
+      if (i > 0 && result[i] > result[i - 1]) {
+        result[i - 1] = -1 * result[i - 1];
+      }
+    }
+    return result.reduce((accumulator, value) => {
+      return accumulator + value;
+    }, 0);
   }
 }
 
