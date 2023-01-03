@@ -24,5 +24,23 @@ function add(a, b) {
       remaining = Number(sum.substring(0, 1));
     }
   }
-  return result;
+  return formatString(result);
+}
+
+function firstNonZeroIndex(n) {
+
+  for (let i = 0; i < n.length; i++) {
+
+    if (n[i] !== "0") return i;
+  }
+  return n.length;
+}
+
+function formatString(n) {
+
+  const nonZeroIndex = firstNonZeroIndex(n);
+
+  if (nonZeroIndex === n.length) return "";
+
+  return n.substring(nonZeroIndex);
 }
