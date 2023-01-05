@@ -18,9 +18,6 @@ function solveExpression(exp) {
     '*': (operands) => operands[0] * operands[1] === operands[2]
   };
 
-  // const allowNegatives = negativesAllowed(operands);
-  // console.log(allowNegatives);
-
   for (let i = startFromZero(operands) ? 0 : 1; i < 10; i++) {
 
     const numericOperads = getNumericOperands(operands, i);
