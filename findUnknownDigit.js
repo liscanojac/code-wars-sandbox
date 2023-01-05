@@ -9,6 +9,7 @@ function solveExpression(exp) {
   const operationType = getOperationType(operation);
   const operands = getOperands(operation, operationType);
   operands.push(expArray[1]);
+  const possibleSolutions = getPossibleSolutions(operands, exp);
   // console.log(operands);
 
   const solver = {
@@ -17,17 +18,31 @@ function solveExpression(exp) {
     '*': (operands) => operands[0] * operands[1] === operands[2]
   };
 
-  const allowNegatives = negativesAllowed(operands);
+  // const allowNegatives = negativesAllowed(operands);
   // console.log(allowNegatives);
 
   for (let i = startFromZero(operands) ? 0 : 1; i < 10; i++) {
 
-    const numericOperads = getNumericOperands(operands, allowNegatives, i);
+    const numericOperads = getNumericOperands(operands, i);
 
     if(solver[operationType](numericOperads) && validSolution(exp, i)) return i;
   }
 
   return -1;
+}
+
+function getPossibleSolutions(operands, exp) {
+
+  let possibleSolutions = Array.from(Array(10).keys());
+
+  function isZeroAllowed(operands) {
+    return !operands.some(operand => operand.startsWith('-?') || (operand[0] === '?' && operand.length > 1));
+  }
+  if (!isZeroAllowed(operands)) possibleSolutions.shift();
+
+  possibleSolutions = possibleSolutions.filter(solution => !exp.includes(solution.toString()));
+
+  return possibleSolutions;
 }
 
 function startFromZero(operands) {
@@ -82,12 +97,9 @@ function negativesAllowed(operands) {
   return flag;
 }
 
-function getNumericOperands(operands, allowNegatives, i) {
+function getNumericOperands(operands, i) {
 
   const operandsNumbers = []
-  if (allowNegatives) {
-
-  }
 
   for (let j = 0; j < operands.length; j++) {
 
