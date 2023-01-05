@@ -10,19 +10,18 @@ function solveExpression(exp) {
   const operands = getOperands(operation, operationType);
   operands.push(expArray[1]);
   const possibleSolutions = getPossibleSolutions(operands, exp);
-  // console.log(operands);
 
-  const solver = {
+  const solutionValidator = {
     '+': (operands) => operands[0] + operands[1] === operands[2],
     '-': (operands) => operands[0] - operands[1] === operands[2],
     '*': (operands) => operands[0] * operands[1] === operands[2]
   };
 
-  for (let i = startFromZero(operands) ? 0 : 1; i < 10; i++) {
+  for (let i = 0; i < possibleSolutions.length; i++) {
 
-    const numericOperads = getNumericOperands(operands, i);
+    const numericOperads = getNumericOperands(operands, possibleSolutions[i]);
 
-    if(solver[operationType](numericOperads) && validSolution(exp, i)) return i;
+    if (solutionValidator[operationType](numericOperads)) return possibleSolutions[i];
   }
 
   return -1;
@@ -40,19 +39,6 @@ function getPossibleSolutions(operands, exp) {
   possibleSolutions = possibleSolutions.filter(solution => !exp.includes(solution.toString()));
 
   return possibleSolutions;
-}
-
-function startFromZero(operands) {
-
-  return !operands.some(operand => operand.startsWith('-?') || (operand[0] === '?' && operand.length > 1));
-}
-
-function validSolution(exp, solution) {
-
-  if (exp.includes('??') && !solution) return false;
-  if (exp.includes(solution.toString())) return false;
-
-  return true;
 }
 
 function getOperationType(operation) {
@@ -85,22 +71,13 @@ function getOperands(operation, operator) {
   return operationArr;
 }
 
-function negativesAllowed(operands) {
-  let flag = true;
-  for (let i = 0; i < operands.length; i++) {
-    if(operands[i] === '?') flag = false;
-    if (operands[i].includes('?') && operands[i][0] !== '?') flag = false;
-  }
-  return flag;
-}
-
-function getNumericOperands(operands, i) {
+function getNumericOperands(operands, possibleSolution) {
 
   const operandsNumbers = []
 
-  for (let j = 0; j < operands.length; j++) {
+  for (let i = 0; i < operands.length; i++) {
 
-    operandsNumbers.push(Number(operands[j].replaceAll('?', i)))
+    operandsNumbers.push(Number(operands[i].replaceAll('?', possibleSolution)))
   }
 
   return operandsNumbers;
