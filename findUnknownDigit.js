@@ -3,7 +3,6 @@
 function solveExpression(exp) {
 
   const expArray = exp.split('=');
-  
   const operation = expArray[0];
 
   const operationType = getOperationType(operation);
