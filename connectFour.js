@@ -2,34 +2,16 @@
 
 function whoIsWinner(piecesPositionList) {
 
-  const boards = {
-    columns: Array.from(Array(7), () => []),
-    rows: Array.from(Array(6), () => [])
-  }
-  const players = {
-    yellow: 'Yellow',
-    red: 'Red'
+  const board = Array.from(Array(7), () => []);
+  const columnHelper = {
+    A: 0,
+    B: 1,
+    C: 2,
+    D: 3,
+    E: 4,
+    F: 5,
+    G: 6
   };
-  const helpers = {
-    columns: {
-      A: 0,
-      B: 1,
-      C: 2,
-      D: 3,
-      E: 4,
-      F: 5,
-      G: 6
-    },
-    rows: {
-      A: 5,
-      B: 5,
-      C: 5,
-      D: 5,
-      E: 5,
-      F: 5,
-      G: 5
-    }
-  }
 
   for (let i = 0; i < piecesPositionList.length; i++) {
     const piecePositionArr = piecesPositionList[i].split('_');
@@ -38,138 +20,146 @@ function whoIsWinner(piecesPositionList) {
       player: piecePositionArr[1]
     };
 
-    boards.columns[helpers.columns[currentPosition.column]].push(currentPosition.player);
-    boards.rows[helpers.rows[currentPosition.column]][helpers.columns[currentPosition.column]] = currentPosition.player;
-    helpers.rows[currentPosition.column]--;
+    board[columnHelper[currentPosition.column]].push(currentPosition.player);
 
     if (i > 3) {
+      
+      const currentPlay = {
+        column: columnHelper[currentPosition.column],
+        row: board[columnHelper[currentPosition.column]].length - 1,
+        player: currentPosition.player
+      };
 
-      const currentValidation = validateBoard(boards);
-      if(currentValidation !== 'Draw') return currentValidation;
+      if (isWinner(board, currentPlay)) return currentPlay.player;
     }
   }
-  return boards;
   return 'Draw';
 }
 
-function validateBoard({ columns, rows }) {
-  const players = {
-    yellow: 'Yellow',
-    red: 'Red'
-  };
+function isWinner(board, { column, row, player }) {
 
-  function straightValidator(board) {
-
-    for (let i = 0; i < board.length; i++) {
-
-      const playersCount = {
-        Yellow: 0,
-        Red: 0
-      };
-
-      if (board[i].length >= 3) {
-        let initialPlayer = board[i][0];
-        playersCount[board[i][0]]++;
-        for (let j = 1; j < board[i].length; j++) {
-          
-          if(!board[i][j]) continue;
-          if (board[i][j] === initialPlayer) {
-            playersCount[board[i][j]]++;
-          } else {
-            playersCount[initialPlayer] = 0;
-            initialPlayer = board[i][j];
-            playersCount[board[i][j]]++;
-          }
-
-          if(playersCount.Red >= 3 || playersCount.Yellow >= 3) {
-            return board[i][j];
-          }
-        }
-      }
+  const areFourConnected = {
+    vertical: {
+      overall: () => row >= 3 && 
+                      board[column][row - 1] === player &&
+                      board[column][row - 2] === player &&
+                      board[column][row - 3] === player
+    },
+    horizontal: {
+      right: () => {
+        return column >= 3 &&
+              board[column - 1][row] === player &&
+              board[column - 2][row] === player &&
+              board[column - 3][row] === player;
+      },
+      left: () => {
+        return column <= 3 &&
+              board[column + 1][row] === player &&
+              board[column + 2][row] === player &&
+              board[column + 3][row] === player;
+      },
+      middleLeft: () => {
+        return column > 0 && column <= 4 &&
+              board[column - 1][row] === player &&
+              board[column + 1][row] === player &&
+              board[column + 2][row] === player;
+      },
+      middleRight: () => {
+        return column < 6 && column > 1 &&
+              board[column + 1][row] === player &&
+              board[column - 1][row] === player &&
+              board[column - 2][row] === player;
+      },
+      overall: () => areFourConnected.horizontal.right() ||
+                      areFourConnected.horizontal.left() ||
+                      areFourConnected.horizontal.middleRight() ||
+                      areFourConnected.horizontal.middleLeft()
+    },
+    diagonal: {
+      upwardStart: () => {
+        return column <= 3 && row <= 2 &&
+              board[column + 1].length - 1 >= row + 1 &&
+              board[column + 2].length - 1 >= row + 2 &&
+              board[column + 3].length - 1 >= row + 3 &&
+              board[column + 1][row + 1] === player &&
+              board[column + 2][row + 2] === player &&
+              board[column + 3][row + 3] === player;
+      },
+      upwardEnd: () => {
+        return column > 2 &&
+              board[column - 1].length - 1 >= row - 1 &&
+              board[column - 2].length - 1 >= row - 2 &&
+              board[column - 3].length - 1 >= row - 3 &&
+              board[column - 1][row - 1] === player &&
+              board[column - 2][row - 2] === player &&
+              board[column - 3][row - 3] === player;
+      },
+      upwardMiddleLeft: () => {
+        return column > 0 && column <= 4 && row > 0 && row <= 3 &&
+              board[column - 1].length - 1 >= row - 1 &&
+              board[column + 1].length - 1 >= row + 1 &&
+              board[column + 2].length - 1 >= row + 2 &&
+              board[column - 1][row - 1] === player &&
+              board[column + 1][row + 1] === player &&
+              board[column + 2][row + 2] === player;
+      },
+      upwardMiddleRight: () => {
+        return column > 1 && column <= 5 && row > 1 && row <= 4 &&
+              board[column - 1].length - 1 >= row - 1 &&
+              board[column - 2].length - 1 >= row - 2 &&
+              board[column + 1].length - 1 >= row + 1 &&
+              board[column - 1][row - 1] === player &&
+              board[column - 2][row - 2] === player &&
+              board[column + 1][row + 1] === player;
+      },
+      downwardStart: () => {
+        return row >= 2 && column <= 3 &&
+              board[column + 1].length - 1 >= row - 1 &&
+              board[column + 2].length - 1 >= row - 2 &&
+              board[column + 3].length - 1 >= row - 3 &&
+              board[column + 1][row - 1] === player &&
+              board[column + 2][row - 2] === player &&
+              board[column + 3][row - 3] === player;
+      },
+      downwardEnd: () => {
+        return row <= 2 && column >= 3 &&
+              board[column - 1].length - 1 >= row + 1 &&
+              board[column - 2].length - 1 >= row + 2 &&
+              board[column - 3].length - 1 >= row + 3 &&
+              board[column - 1][row + 1] === player &&
+              board[column - 2][row + 2] === player &&
+              board[column - 3][row + 3] === player;
+      },
+      downwardMiddleLeft: () => {
+        return column < 5 && column >= 1 && row > 0 && row <= 4 &&
+              board[column - 1].length - 1 >= row + 1 &&
+              board[column + 1].length - 1 >= row - 1 &&
+              board[column + 2].length - 1 >= row - 2 &&
+              board[column - 1][row + 1] === player &&
+              board[column + 1][row - 1] === player &&
+              board[column + 2][row - 2] === player;
+      },
+      downwardMiddleRight: () => {
+        return column < 4 && column >= 2 && row > 1 && row <= 5 &&
+              board[column - 1].length - 1 >= row + 1 &&
+              board[column - 2].length - 1 >= row + 2 &&
+              board[column + 1].length - 1 >= row - 1 &&
+              board[column - 1][row + 1] === player &&
+              board[column - 2][row + 2] === player &&
+              board[column + 1][row - 1] === player;
+      },
+      overall: () => areFourConnected.diagonal.upwardStart() ||
+                    areFourConnected.diagonal.upwardEnd() ||
+                    areFourConnected.diagonal.upwardMiddleLeft() ||
+                    areFourConnected.diagonal.upwardMiddleRight() ||
+                    areFourConnected.diagonal.downwardStart() ||
+                    areFourConnected.diagonal.downwardEnd() ||
+                    areFourConnected.diagonal.downwardMiddleLeft() ||
+                    areFourConnected.diagonal.downwardMiddleRight()
     }
-    return 'Draw'
   }
 
-  function diagonalValidator(board) {
-
-    function getCuadrants(column, row) {
-
-      const cuadrants = [];
-
-      switch(column) {
-        case column < 2:
-          if (board[column + 1].length >= row - 1 && 
-              board[column + 2].length >= row - 2) 
-                cuadrants.push('second');
-          if (board[column + 1].length >= row + 1 && 
-              board[column + 2].length >= row + 2) 
-                cuadrants.push('third');
-        case column > 4:
-          if (board[column - 1].length >= row - 1 && 
-              board[column - 2].length >= row - 2) 
-                cuadrants.push('first');
-          if (board[column - 1].length >= row + 1 && board[column - 2].length >= row + 2) cuadrants.push('fourth');
-        default:
-          if (board[column - 1].length >= row - 1 && 
-              board[column - 2].length >= row - 2) 
-                cuadrants.push('first');
-          if (board[column + 1].length >= row - 1 && 
-              board[column + 2].length >= row - 2) 
-                cuadrants.push('second');
-          if (board[column + 1].length >= row + 1 && 
-              board[column + 2].length >= row + 2) 
-                cuadrants.push('third');
-          if (board[column - 1].length >= row + 1 && 
-              board[column - 2].length >= row + 2) 
-                cuadrants.push('fourth');
-      }
-      return cuadrants;
-    }
-
-    function cuadrantValidator(cuadrants, startingPoint) {
-
-      const result = {
-        winner: 'Draw',
-        valid: false
-      };
-
-      const cuandrantMethods = {
-        first: () => {
-          if (board[startingPoint.column - 1][startingPoint.row - 1] === startingPoint.player &&
-              board[startingPoint.column - 2][startingPoint.row - 2] === startingPoint.player) {
-                result.winner = startingPoint.player;
-                result.valid = true;
-                return result;
-            }
-        },
-        second: (cuadrant) => {},
-        third: (cuadrant) => {},
-        fourth: (cuadrant) => {}
-      };
-
-      for (let i = 0; i < cuadrants.length; i++) {
-        cuandrantMethods[cuadrants[i]]();
-      }
-    }
-    for (let i = 0; i < board.length; i++) {
-
-      if (board[i].length < 3) continue;
-      for (let j = 3; j < board[i].length; j++) {
-        const currentCuadrants = getCuadrants(i, j);
-        if (!currentCuadrants.length) continue;
-
-
-      }
-
-      
-    }
-  }
-
-  const validateColumns = straightValidator(columns);
-  if (validateColumns !== 'Draw') return validateColumns;
-  const validateRows = straightValidator(rows);
-  if(validateRows !== 'Draw') return validateRows;
-  return 'Draw';
+  return areFourConnected.vertical.overall() || areFourConnected.horizontal.overall() || areFourConnected.diagonal.overall();
 }
 
 module.exports = {
