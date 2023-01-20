@@ -1,5 +1,5 @@
 // https://www.codewars.com/kata/52223df9e8f98c7aa7000062
-import { CharacterType } from "./interfaces/rot13";
+import { CharacterType } from "../interfaces/rot13";
 
 function rot13(str: string): string {
 
