@@ -8,7 +8,7 @@ describe('Caesar Cipher Helper kata', () => {
 
     expect(caesarCipher.encode('Codewars')).toBe('HTIJBFWX');
   });
-  test('encode Codewars', () => {
+  test('decode BFKKQJX', () => {
 
     expect(caesarCipher.decode('BFKKQJX')).toBe('WAFFLES');
   });
