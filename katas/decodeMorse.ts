@@ -1,5 +1,5 @@
 // https://www.codewars.com/kata/54b724efac3d5402db00065e
-import { morseCodeToAlphabet } from "./morse/morseCode";
+import { morseCodeToAlphabet } from "../morse/morseCode";
 
 export const decodeMorse = function(morseCode: String): String {
 
