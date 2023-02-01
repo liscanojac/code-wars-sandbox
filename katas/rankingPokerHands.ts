@@ -177,11 +177,7 @@ export class PokerHand {
   };
   compareWith(rival: PokerHand): number {
 
-
-    if (this.handValue.value === rival.handValue.value) {
-
-      return this.concatAndCompare(rival);
-    }
+    if (this.handValue.value === rival.handValue.value) return this.concatAndCompare(rival);
 
     return winnerHandsHierarchy[this.handValue.value] > winnerHandsHierarchy[rival.handValue.value] ? Result.win : Result.loss;
   };
