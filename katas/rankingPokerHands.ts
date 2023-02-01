@@ -180,40 +180,7 @@ export class PokerHand {
 
     if (this.handValue.value === rival.handValue.value) {
 
-      const winnerHand = {
-        high_card: (): number => {
-          return this.cardsComparisonLoop(this.handValue.remainingCards!, rival.handValue.remainingCards!);
-        },
-        straight_flush: (): number => {
-          return this.compareCards(this.handValue.highestCard, rival.handValue.highestCard)
-        },
-        pair: (): number => {
-          return this.concatAndCompare(rival);
-        },
-        two_pair: (): number => {
-          return this.concatAndCompare(rival);
-        },
-        flush: (): number => {
-          return this.cardsComparisonLoop(this.handValue.remainingCards!, rival.handValue.remainingCards!);
-        },
-        royal_flush: (): number => {
-          return Result.tie;
-        },
-        four_of_a_kind: (): number => {
-          return this.concatAndCompare(rival);
-        },
-        full_house: (): number => {
-          return this.concatAndCompare(rival);
-        },
-        straight: (): number => {
-          return this.compareCards(this.handValue.highestCard, rival.handValue.highestCard);
-        },
-        three_of_a_kind: (): number => {
-          return this.concatAndCompare(rival);
-        }
-      }
-
-      return winnerHand[this.handValue.value]();
+      return this.concatAndCompare(rival);
     }
 
     return winnerHandsHierarchy[this.handValue.value] > winnerHandsHierarchy[rival.handValue.value] ? Result.win : Result.loss;
