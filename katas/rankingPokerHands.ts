@@ -177,15 +177,9 @@ export class PokerHand {
   };
   compareWith(rival: PokerHand): number {
 
-    if (this.handValue.value === rival.handValue.value) return this.concatAndCompare(rival);
+    if (this.handValue.value === rival.handValue.value) return this.determineWinner(rival);
 
     return winnerHandsHierarchy[this.handValue.value] > winnerHandsHierarchy[rival.handValue.value] ? Result.win : Result.loss;
-  };
-  private concatAndCompare(rival: PokerHand): number {
-    const playerCardsToCompare: Array<string> = Array.prototype.concat(this.handValue.highestCard, this.handValue.secondHighestCard, this.handValue.remainingCards).filter((card: string | undefined) => card);
-    const rivalCardsToCompare: Array<string> = Array.prototype.concat(rival.handValue.highestCard, rival.handValue.secondHighestCard, rival.handValue.remainingCards).filter((card: string | undefined) => card);
-
-    return this.cardsComparisonLoop(playerCardsToCompare, rivalCardsToCompare);
   };
   private compareCards(playerCard: string, rivalCard: string): number {
 
@@ -197,15 +191,14 @@ export class PokerHand {
 
     return hierarchies.player > hierarchies.rival ? Result.win : Result.loss;
   };
-  private cardsComparisonLoop(playerCardsArr: Array<string>, rivalCardsArr: Array<string>): number {
+  private determineWinner(rival: PokerHand): number {
+    const playerCardsToCompare: Array<string> = Array.prototype.concat(this.handValue.highestCard, this.handValue.secondHighestCard, this.handValue.remainingCards).filter((card: string | undefined) => card);
+    const rivalCardsToCompare: Array<string> = Array.prototype.concat(rival.handValue.highestCard, rival.handValue.secondHighestCard, rival.handValue.remainingCards).filter((card: string | undefined) => card);
 
-    for (let i = 0; i < playerCardsArr.length; i++) {
+    for (let i = 0; i < playerCardsToCompare.length; i++) {
 
-      if (playerCardsArr[i] !== rivalCardsArr[i]) {
-
-        return this.compareCards(playerCardsArr[i], rivalCardsArr[i])
-      }
+      if (playerCardsToCompare[i] !== rivalCardsToCompare[i]) return this.compareCards(playerCardsToCompare[i], rivalCardsToCompare[i]);
     }
     return Result.tie;
-  };
+  }
 }
