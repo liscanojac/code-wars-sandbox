@@ -1,10 +1,6 @@
 
 type WinnerHandNames = "high_card" | "pair" | "two_pair" | "three_of_a_kind" | "straight" | "flush" | "full_house" | "four_of_a_kind" | "straight_flush" | "royal_flush";
 
-type CardPacks = "S" | "H" | "D" | "C";
-
-type CardRanks = "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "T" | "J" | "Q" | "K" | "A";
-
 type Hand = {
   value: WinnerHandNames;
   highestCard: string;
