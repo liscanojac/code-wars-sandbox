@@ -15,6 +15,15 @@ const haskellReturn: HaskellReturnObj = {
 
 export function isInteresting(number: number, awesomePhrases: Array<number>): HaskellReturn {
 
+  for (let i = number; i <= number + 2; i++) {
+
+    const interestingCheck = interestingChecker(i, awesomePhrases);
+    if (interestingCheck) return interestingCheck;
+  }
+}
+
+function interestingChecker(num: number, awesomePhrases: Array<number>): boolean {
+
   const interestingNumber = {
     followedByZeroes: true,
     sameDigit: true,
@@ -22,13 +31,13 @@ export function isInteresting(number: number, awesomePhrases: Array<number>): Ha
     sequentialDecreasing: true,
   };
 
-  const awesomePhrasesCheck = awesomePhrasesChecker(number, awesomePhrases);
-  if (awesomePhrasesCheck) return awesomePhrasesCheck;
+  const awesomePhrasesCheck = awesomePhrases.includes(num);
+  if (awesomePhrasesCheck) return true;
 
-  const palindromeCheck = palindromeChecker(number);
-  if (palindromeCheck) return palindromeCheck;
+  const palindromeCheck = palindromeChecker(num);
+  if (palindromeCheck) return true;
   
-  const numStr = number.toString();
+  const numStr = num.toString();
 
   const startingNum = numStr[0];
 
@@ -54,23 +63,11 @@ function awesomePhrasesChecker(num: number, awesomePhrases: Array<number>): Hask
   return haskellReturn.no_match;
 }
 
-function palindromeChecker(num: number): HaskellReturn {
-
-  for (let i = num; i <= num + 2; i++) {
-
-    const numStr = i.toString();
-
-    const halfNumLength = numStr.length / 2;
-
-    const numLeftHalf = numStr.substring(0, Math.floor(halfNumLength));
-    const numRightHalf = numStr.substring(Math.ceil(halfNumLength)).split('').reverse().join('');
-
-    if (numLeftHalf === numRightHalf) {
-      if (i === num) return haskellReturn.match;
-      return haskellReturn.almost;
-    }
-  }
-  return haskellReturn.no_match;
+function palindromeChecker(num: number): boolean {
+  const numStr = num.toString();
+  const numLeftHalf = numStr.substring(0, Math.floor(numStr.length / 2));
+  const numRightHalf = numStr.substring(Math.ceil(numStr.length / 2)).split('').reverse().join('');
+  return numLeftHalf === numRightHalf;
 }
 
 function sequentialIncrementChecker(num1: number, num2: number): boolean {
