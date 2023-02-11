@@ -7,35 +7,37 @@ type HaskellReturnObj = {
   no_match: 0;
 };
 
-const haskellReturn: HaskellReturnObj = {
-  match: 2,
-  almost: 1,
-  no_match: 0
-};
 
 export function isInteresting(number: number, awesomePhrases: Array<number>): HaskellReturn {
-
+  
+  const haskellReturn: HaskellReturnObj = {
+    match: 2,
+    almost: 1,
+    no_match: 0
+  };
+  if (number < 98) return haskellReturn.no_match;
+  
   for (let i = number; i <= number + 2; i++) {
 
+    if(i <= 99) continue;
     const interestingCheck = interestingChecker(i, awesomePhrases);
-    if (interestingCheck) return interestingCheck;
+    if (interestingCheck) return i === number ? haskellReturn.match : haskellReturn.almost;
   }
+  return haskellReturn.no_match;
 }
 
 function interestingChecker(num: number, awesomePhrases: Array<number>): boolean {
 
-  const interestingNumber = {
+  const interestingFactors = {
     followedByZeroes: true,
     sameDigit: true,
     sequentialIncrementing: true,
-    sequentialDecreasing: true,
+    sequentialDecreasing: true
   };
 
-  const awesomePhrasesCheck = awesomePhrases.includes(num);
-  if (awesomePhrasesCheck) return true;
+  if (awesomePhrases.includes(num)) return true;
 
-  const palindromeCheck = palindromeChecker(num);
-  if (palindromeCheck) return true;
+  if (palindromeChecker(num)) return true;
   
   const numStr = num.toString();
 
@@ -43,24 +45,20 @@ function interestingChecker(num: number, awesomePhrases: Array<number>): boolean
 
   for (let i = 1; i < numStr.length; i++) {
 
-    if (interestingNumber.followedByZeroes) interestingNumber.followedByZeroes = numStr[i] === '0';
+    if (interestingFactors.followedByZeroes) interestingFactors.followedByZeroes = numStr[i] === '0';
+    
+    if (interestingFactors.sameDigit) interestingFactors.sameDigit = startingNum === numStr[i];
+    
+    if (interestingFactors.sequentialIncrementing) interestingFactors.sequentialIncrementing = sequentialIncrementChecker(Number(numStr[i - 1]), Number(numStr[i]));
+    
+    if (interestingFactors.sequentialDecreasing) interestingFactors.sequentialDecreasing = sequentialDecreaseChecker(Number(numStr[i - 1]), Number(numStr[i]));
 
-    if (interestingNumber.sameDigit) interestingNumber.sameDigit = startingNum === numStr[i];
-
-    if (interestingNumber.sequentialIncrementing) interestingNumber.sequentialIncrementing = sequentialIncrementChecker(Number(numStr[i - 1]), Number(numStr[i]));
-
-    if (interestingNumber.sequentialDecreasing) interestingNumber.sequentialDecreasing = sequentialDecreaseChecker(Number(numStr[i - 1]), Number(numStr[i]));
+    if(!interestingFactors.followedByZeroes &&
+      !interestingFactors.sameDigit &&
+      !interestingFactors.sequentialIncrementing &&
+      !interestingFactors.sequentialDecreasing) return false;
   }
-}
-
-function awesomePhrasesChecker(num: number, awesomePhrases: Array<number>): HaskellReturn {
-
-  for (let i = 0; i < awesomePhrases.length; i++) {
-
-    if (awesomePhrases[i] === num) return haskellReturn.match;
-    if (num < awesomePhrases[i] && num >= awesomePhrases[i] - 2) return haskellReturn.almost;
-  }
-  return haskellReturn.no_match;
+  return true;
 }
 
 function palindromeChecker(num: number): boolean {
@@ -74,12 +72,12 @@ function sequentialIncrementChecker(num1: number, num2: number): boolean {
 
   if (num1 === 9) return num2 === 0;
 
-  return num2 === num1 + 1;
+  return num1 > 0 && num2 === num1 + 1;
 }
 
 function sequentialDecreaseChecker(num1: number, num2: number): boolean {
 
   if (!num1) return num2 === 9;
 
-  return num2 === num1 - 1;
+  return num1 > 0 && num2 === num1 - 1;
 }
