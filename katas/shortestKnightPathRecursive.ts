@@ -3,11 +3,15 @@ import { movements } from "./shortestKnightPathRecursive/possibleMovements";
 
 export function knight(start: string, finish: string): number {
 
+  const movementsDone: Array<string> = [];
+
   function moveKnight(start: string, moves: number = 1): number {
 
     const possibleMovements = determinePossibleMovements(start);
 
     if (possibleMovements.includes(finish)) return moves;
+    possibleMovements.filter(movement => !movementsDone.includes(movement));
+    movementsDone.concat(possibleMovements);
 
     moves = moves + 1;
     for (let i = 0; i < possibleMovements.length; i++) {
@@ -15,6 +19,7 @@ export function knight(start: string, finish: string): number {
       return moveKnight(possibleMovements[i], moves);
     }
     return moves;
+    // return possibleMovements.forEach((start: string) => moveKnight(start, moves))
   }
 
   return moveKnight(start);
