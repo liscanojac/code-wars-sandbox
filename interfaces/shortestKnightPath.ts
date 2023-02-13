@@ -1,10 +1,10 @@
 
-export type Movement = {
+export type Coordinates = {
   direction: string;
   depth: string;
 };
 
-export type PossibleMovement = {
+export type Movement = {
   position: string,
   move: number
 };
