@@ -7,7 +7,7 @@ export function knight(start: string, finish: string): number {
 
   let movements = [getStartMovement(start)];
 
-  function moveKnight(start: Movement | undefined, finish: string): number {
+  function moveKnight(start: Movement | undefined): number {
 
     if(!start) return 0;
     const movementsDone = getMovements(start)
@@ -16,7 +16,7 @@ export function knight(start: string, finish: string): number {
     if (finishFound) return finishFound.move;
 
     movements = movements.concat(movementsDone);
-    return moveKnight(movements.shift(), finish);
+    return moveKnight(movements.shift());
   }
-  return moveKnight(movements.shift()!, finish);
+  return moveKnight(movements.shift());
 }
