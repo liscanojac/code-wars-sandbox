@@ -8,7 +8,7 @@ type VertixHelper = {
   start: number;
   end: number;
   base: number;
-  funtionIndex: number;
+  functionIndex: number;
   functionIndexCounter: () => void
 };
 
@@ -20,12 +20,12 @@ function makeTriangle(m: number, n: number): string {
     start: 1,
     end: 0,
     base: 0,
-    funtionIndex: 0,
+    functionIndex: 0,
     functionIndexCounter: () => {
-      if (vertixHelper.funtionIndex === 3) {
-        vertixHelper.funtionIndex = 0;
+      if (vertixHelper.functionIndex === 2) {
+        vertixHelper.functionIndex = 0;
       } else {
-        vertixHelper.funtionIndex++;
+        vertixHelper.functionIndex++;
       }
     },
   };
@@ -34,7 +34,6 @@ function makeTriangle(m: number, n: number): string {
     const triangleLevel: Array<number> = new Array(i);
     triangleArr.push(triangleLevel);
   }
-  // console.log(triangleArr);
   function startHelper() {
     triangleArr[0][0] = m;
     m++;
@@ -43,14 +42,14 @@ function makeTriangle(m: number, n: number): string {
 
     for (let i = vertixHelper.start; i < triangleArr.length - vertixHelper.end; i++) {
 
-      triangleArr[i][triangleArr[i].length - 1] = m;
+      triangleArr[i][triangleArr[i].length - vertixHelper.start] = m;
       m++;
     }
     vertixHelper.end++;
   }
   function baseHelper() {
 
-    for (let i = triangleArr[triangleArr.length - 1 - vertixHelper.base].length - 1; i >= 0; i--) {
+    for (let i = triangleArr[triangleArr.length - 1 - vertixHelper.base].length - 2; i >= 0; i--) {
 
       triangleArr[triangleArr.length - 1 - vertixHelper.base][i] = m;
       m++;
@@ -61,16 +60,16 @@ function makeTriangle(m: number, n: number): string {
 
     for (let i = triangleArr.length - 1 - vertixHelper.end; i >= vertixHelper.start; i--) {
 
-      triangle[i][0] = m;
+      triangleArr[i][0] = m;
       m++;
     }
     vertixHelper.start++;
   }
-  const vertixfuntions = [downwardHelper, baseHelper, upwardHelper];
-
+  const vertixFunctions = [downwardHelper, baseHelper, upwardHelper];
+  startHelper();
   while(m <= n) {
 
-    vertixfuntions[vertixHelper.funtionIndex]();
+    vertixFunctions[vertixHelper.functionIndex]();
     vertixHelper.functionIndexCounter();
   }
   console.log(triangleArr);
@@ -91,3 +90,5 @@ function validTriangle(n: number): Triangle {
     length: i
   };
 }
+
+makeTriangle(1, 10)
