@@ -8,6 +8,7 @@ type VertixHelper = {
   start: number;
   end: number;
   base: number;
+  tier: number;
   functionIndex: number;
   functionIndexCounter: () => void
 };
@@ -20,10 +21,12 @@ function makeTriangle(m: number, n: number): string {
     start: 1,
     end: 0,
     base: 0,
+    tier: 0,
     functionIndex: 0,
     functionIndexCounter: () => {
       if (vertixHelper.functionIndex === 2) {
         vertixHelper.functionIndex = 0;
+        vertixHelper.tier++;
       } else {
         vertixHelper.functionIndex++;
       }
@@ -39,32 +42,60 @@ function makeTriangle(m: number, n: number): string {
     m++;
   }
   function downwardHelper() {
+    for (let i = 0; i < triangleArr.length; i++) {
 
-    for (let i = vertixHelper.start; i < triangleArr.length - vertixHelper.end; i++) {
-
-      triangleArr[i][triangleArr[i].length - vertixHelper.start] = m;
-      m++;
+      if (triangleArr[i].length - 1 - vertixHelper.tier > 0 && !triangleArr[i][triangleArr[i].length - 1 - vertixHelper.tier]) {
+        triangleArr[i][triangleArr[i].length - 1 - vertixHelper.tier] = m;
+        m++;
+      }
     }
-    vertixHelper.end++;
   }
   function baseHelper() {
+    for (let i = triangleArr[triangleArr.length - 1 - vertixHelper.tier].length - 1; i >= 0; i--) {
 
-    for (let i = triangleArr[triangleArr.length - 1 - vertixHelper.base].length - 2; i >= 0; i--) {
-
-      triangleArr[triangleArr.length - 1 - vertixHelper.base][i] = m;
-      m++;
+      if (!triangleArr[triangleArr.length - 1 - vertixHelper.tier][i]) {
+        triangleArr[triangleArr.length - 1 - vertixHelper.tier][i] = m;
+        m++;
+      }
     }
-    vertixHelper.base++;
   }
+
   function upwardHelper() {
-
-    for (let i = triangleArr.length - 1 - vertixHelper.end; i >= vertixHelper.start; i--) {
-
-      triangleArr[i][0] = m;
-      m++;
+    for (let i = triangleArr.length - 1; i >= 0; i--) {
+      if (!triangleArr[i][vertixHelper.tier] && vertixHelper.tier < triangleArr[i].length) {
+        
+        triangleArr[i][vertixHelper.tier] = m;
+        m++;
+      }
     }
-    vertixHelper.start++;
   }
+  // function downwardHelper() {
+    
+  //   vertixHelper.end++;
+  //   for (let i = vertixHelper.start; i < triangleArr.length - vertixHelper.end; i++) {
+
+  //     triangleArr[i][triangleArr[i].length - vertixHelper.start] = m;
+  //     m++;
+  //   }
+  // }
+  // function baseHelper() {
+
+  //   for (let i = triangleArr[triangleArr.length - 1 - vertixHelper.base].length - 2; i >= 1; i--) {
+
+  //     triangleArr[triangleArr.length - 1 - vertixHelper.base][i] = m;
+  //     m++;
+  //   }
+  //   vertixHelper.base++;
+  // }
+  // function upwardHelper() {
+
+  //   for (let i = triangleArr.length - 1 - vertixHelper.end; i >= vertixHelper.start; i--) {
+
+  //     triangleArr[i][0] = m;
+  //     m++;
+  //   }
+  //   vertixHelper.start++;
+  // }
   const vertixFunctions = [downwardHelper, baseHelper, upwardHelper];
   startHelper();
   while(m <= n) {
@@ -92,3 +123,5 @@ function validTriangle(n: number): Triangle {
 }
 
 makeTriangle(1, 10)
+
+makeTriangle(1, 21)
