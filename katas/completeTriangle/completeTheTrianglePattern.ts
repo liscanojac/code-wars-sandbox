@@ -69,33 +69,6 @@ function makeTriangle(m: number, n: number): string {
       }
     }
   }
-  // function downwardHelper() {
-    
-  //   vertixHelper.end++;
-  //   for (let i = vertixHelper.start; i < triangleArr.length - vertixHelper.end; i++) {
-
-  //     triangleArr[i][triangleArr[i].length - vertixHelper.start] = m;
-  //     m++;
-  //   }
-  // }
-  // function baseHelper() {
-
-  //   for (let i = triangleArr[triangleArr.length - 1 - vertixHelper.base].length - 2; i >= 1; i--) {
-
-  //     triangleArr[triangleArr.length - 1 - vertixHelper.base][i] = m;
-  //     m++;
-  //   }
-  //   vertixHelper.base++;
-  // }
-  // function upwardHelper() {
-
-  //   for (let i = triangleArr.length - 1 - vertixHelper.end; i >= vertixHelper.start; i--) {
-
-  //     triangleArr[i][0] = m;
-  //     m++;
-  //   }
-  //   vertixHelper.start++;
-  // }
   const vertixFunctions = [downwardHelper, baseHelper, upwardHelper];
   startHelper();
   while(m <= n) {
