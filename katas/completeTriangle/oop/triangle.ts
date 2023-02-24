@@ -1,5 +1,5 @@
-import { TriangleInterface, TriangleSize } from "../../interfaces/completeTheTrianglePattern";
-import { triangleValidator } from "./triangleSizeValidator";
+import { TriangleInterface, TriangleSize } from "../interfaces/completeTheTrianglePattern";
+import { triangleValidator } from "../functional/triangleSizeValidator";
 
 // export class Triangle implements TriangleInterface {
 //   start: number;

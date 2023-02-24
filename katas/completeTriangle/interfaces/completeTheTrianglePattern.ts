@@ -1,4 +1,4 @@
-import { Triangle } from "../katas/completeTriangle/triangle";
+import { Triangle } from "../oop/triangle";
 
 type TriangleSize = {
   valid: boolean;
