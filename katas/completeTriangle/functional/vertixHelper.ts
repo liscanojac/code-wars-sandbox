@@ -10,5 +10,5 @@ export const vertixHelper: VertixHelperType = {
     } else {
       vertixHelper.functionIndex++;
     }
-  },
+  }
 }
