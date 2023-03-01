@@ -6,13 +6,13 @@ export function whatCentury(year: string): string {
               `${Number(year.substring(0, 2)) + 1}` : 
               year.substring(0, 2);
 
-  const ordinalNumbers = {
+  const ordinalSuffix = {
     1: "st",
     2: "nd",
     3: "rd"
   };
 
-  return ordinalNumbers[century.substring(1)] && century.substring(0, 1) !== '1' ? 
-        `${century}${ordinalNumbers[century.substring(1)]}` :
+  return ordinalSuffix[century.substring(1)] && century.substring(0, 1) !== '1' ? 
+        `${century}${ordinalSuffix[century.substring(1)]}` :
         `${century}th`;
 }
