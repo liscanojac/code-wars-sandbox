@@ -7,4 +7,7 @@ interface StoreItem {
 
 export function greedyThief(items: Array<StoreItem>, maxWeight: number): Array<StoreItem> {
   
+  const sortedItemsByPrice = [...items].sort((a, b) => b.price - a.price);
+
+  return sortedItemsByPrice;
 }
