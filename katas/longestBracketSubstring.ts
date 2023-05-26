@@ -19,13 +19,18 @@ export function longestBracket(str: string): number {
   const helpers: Helper = {
     longestSubstr: 0,
     closedBracketsInRow: 0,
-    currentSubstr: 0
+    currentSubstr: 0,
   }
 
   for (let i = 0; i < str.length; i++) {
 
     const currentChar = str[i];
 
+    // if(currentChar === bracket.opening) helpers.balance++;
+    // if (currentChar === bracket.closing && helpers.balance > 0) {
+    //   helpers.currentSubstr++;
+    //   helpers.balance--;
+    // }
     if (helpers.balance === undefined) {
 
       if (currentChar === bracket.opening) {
@@ -47,7 +52,12 @@ export function longestBracket(str: string): number {
       }
     }
   }
-  if (helpers.balance === 0 && helpers.currentSubstr > helpers.longestSubstr) helpers.longestSubstr = helpers.currentSubstr;
+  // if (helpers.currentSubstr > helpers.longestSubstr) {
+  //   helpers.longestSubstr = helpers.currentSubstr;
+  // }
+  if (helpers.balance && helpers.balance >= 0 && helpers.currentSubstr > helpers.longestSubstr) {
+    helpers.longestSubstr = helpers.currentSubstr - helpers.balance;
+  }
 
   return helpers.longestSubstr;
 }
