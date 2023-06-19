@@ -23,7 +23,7 @@ export class Warrior {
   rank(): Rank {
     const ranks: Array<Rank> = ["Pushover", "Novice", "Fighter", "Warrior", "Veteran", "Sage", "Elite", "Conqueror", "Champion", "Master", "Greatest"];
 
-    return ranks[this.#getRank()];
+    return ranks[this.#getRankScore()];
   }
 
   training(rival: Trainee): string {
@@ -42,7 +42,7 @@ export class Warrior {
     if (!this.#isLevelValid(rivalLevel)) return "Invalid level";
 
     const levelDiff = rivalLevel - this.level();
-    const rankDiff = this.#getRank(rivalLevel) - this.#getRank();
+    const rankDiff = this.#getRankScore(rivalLevel) - this.#getRankScore();
 
     if (rankDiff >= 1 && levelDiff >= 5) return "You've been defeated";
     if (levelDiff < -1) return "Easy fight";
@@ -62,7 +62,7 @@ export class Warrior {
     this.#experience = this.#experience + exp > 10000 ? 10000 : this.#experience + exp;
   }
 
-  #getRank(level: number = this.level()): number {
+  #getRankScore(level: number = this.level()): number {
     return Math.floor(level / 10);
   }
 }
