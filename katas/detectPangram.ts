@@ -11,6 +11,8 @@ function isPangram(str: string): boolean {
 
   for (let i = 0; i < str.length; i++) {
 
+    if (alphabetChecker.length === alphabetLength) break;
+    
     if(str.charCodeAt(i) > 96 && 
       str.charCodeAt(i) < 123 &&
       !alphabetChecker.includes(str[i])) {
