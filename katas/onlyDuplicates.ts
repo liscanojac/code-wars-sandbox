@@ -6,6 +6,10 @@ interface Helper {
   }
 }
 
+interface DuplicatesHelper {
+  [i: string]: boolean;
+};
+
 export function onlyDuplicates(str: string): string {
 
   const counter: Helper = {};
@@ -34,10 +38,13 @@ export function onlyDuplicates(str: string): string {
 }
 
 export function onlyDuplicates2(str: string): string {
-
+  
+  const duplicateHelper: DuplicatesHelper = {};
   function isDuplicate(char: string): boolean {
 
-    return str.split(char).length > 2;
+    if (duplicateHelper[char] === undefined) duplicateHelper[char] = str.split(char).length > 2;
+    
+    return duplicateHelper[char];
   }
   let onlyDuplicatesStr: string = '';
 
