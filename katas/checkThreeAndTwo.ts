@@ -18,4 +18,5 @@ export function checkThreeAndTwo(arr: Array<string>): boolean {
     return false
   }
   return true;
+
 }

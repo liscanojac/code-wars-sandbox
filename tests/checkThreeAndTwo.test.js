@@ -16,4 +16,5 @@ describe('Check three and two kata', () => {
 
     expect(checkThreeAndTwo(["a", "a", "a", "a", "a"])).toBeFalsy();
   });
+
 })
