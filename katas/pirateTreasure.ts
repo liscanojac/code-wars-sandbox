@@ -1,3 +1,7 @@
+interface NumericObject {
+  [i: string]: number
+};
+
 export function getCommonDivisor(numericArray: Array<number>): number {
 
   let commonDivisor = 1;
@@ -28,6 +32,7 @@ export class PirateCode {
 
   private setVariables() {
     let currentCodeElement = this.str[0];
+    const numericObject: NumericObject = {};
 
     for (let i = 1; i < this.str.length; i++) {
       const currentChar = this.str[i];
@@ -36,12 +41,12 @@ export class PirateCode {
         continue;
       }
       this.arr.push(currentCodeElement);
-      if (isNumeric(currentCodeElement)) this.numericArray.push(Number(currentCodeElement));
+      if (isNumeric(currentCodeElement)) numericObject[currentCodeElement] = Number(currentCodeElement);
       currentCodeElement = currentChar;
     }
     this.arr.push(currentCodeElement);
-    if (isNumeric(currentCodeElement)) this.numericArray.push(Number(currentCodeElement));
-    this.numericArray = [...new Set(this.numericArray.sort((a, b) => a - b))];
+    if (isNumeric(currentCodeElement)) numericObject[currentCodeElement] = Number(currentCodeElement);
+    this.numericArray = Object.values(numericObject);
   }
   private addsToCodeElement(codeElement: string, char: string): boolean {
     return isNumeric(char) && isNumeric(codeElement) || !isNumeric(char) && !isNumeric(codeElement);
@@ -50,10 +55,6 @@ export class PirateCode {
 
 export function isNumeric(code: string): boolean {
   return !isNaN(parseFloat(code)) && !isNaN(Number(code));
-}
-
-function addsToCodeElement(code: string, char: string): boolean {
-  return isNumeric(char) && isNumeric(code) || !isNumeric(char) && !isNumeric(code);
 }
 
 export function getTreasureCode(code: string): string {
